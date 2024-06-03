@@ -18,6 +18,9 @@ import os
 
 from yarl import URL
 
+from dotenv import load_dotenv
+load_dotenv()
+
 try:
     port = int(os.environ.get("PORT", "8080"))
 except ValueError:
@@ -33,6 +36,8 @@ except (KeyError, ValueError):
     print("Please set the TG_API_ID and TG_API_HASH environment variables correctly")
     print("You can get your own API keys at https://my.telegram.org/apps")
     sys.exit(1)
+
+bot_token = os.environ["TG_BOT_TOKEN"]
 
 trust_headers = bool(os.environ.get("TRUST_FORWARD_HEADERS"))
 host = os.environ.get("HOST", "localhost")
