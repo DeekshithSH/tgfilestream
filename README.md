@@ -12,6 +12,7 @@ should include the protocol, e.g. `https://example.com`.
 ### Environment variables
 * `TG_API_ID` (required) - Your Telegram API ID.
 * `TG_API_HASH` (required) - Your Telegram API hash.
+* `TG_BOT_TOKEN` (defaults to `tgfilestream`) - Your Telegram Bot Token.
 * `TG_SESSION_NAME` (defaults to `tgfilestream`) - The name of the Telethon session file to use.
 * `PORT` (defaults to `8080`) - The port to listen at.
 * `HOST` (defaults to `localhost`) - The host to listen at.
