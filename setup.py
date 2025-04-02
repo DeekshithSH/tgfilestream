@@ -25,6 +25,7 @@ setuptools.setup(
         "aiohttp>=3",
         "telethon>=1.10",
         "yarl>=1",
+        "python-dotenv>=0.20",
     ],
     extras_require={
         "fast": ["cryptg>=0.2"],
