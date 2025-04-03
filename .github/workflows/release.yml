@@ -1,0 +1,53 @@
+name: Build and Release
+on:
+  push:
+    tags:
+      - "v*"
+  workflow_dispatch: {}
+
+permissions: write-all
+
+jobs:
+  build-and-publish:
+    name: Build and Upload to Release
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout source
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.x"
+
+      - name: Extract Version from Code
+        run: |
+          VERSION=$(grep -E '__version__ = ".*"' tgfilestream/__init__.py | cut -d '"' -f2)
+          echo "CURRENT_LIB_VERSION=v$VERSION" >> $GITHUB_ENV
+
+      - name: Rename tgfilestream to tgfs
+        run: |
+          mv tgfilestream tgfs
+          find . -type f ! -path "./.github/workflows/*" -exec sed -i 's/tgfilestream/tgfs/g' {} +
+
+      - name: Install dependencies
+        run: python -m pip install --upgrade build twine
+
+      - name: Build package
+        run: python -m build
+
+      - name: Check package
+        run: twine check --strict dist/*
+
+      - name: Create GitHub Release
+        id: create_release
+        uses: softprops/action-gh-release@v2
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: ${{ env.CURRENT_LIB_VERSION }}
+          name: ${{ env.CURRENT_LIB_VERSION }} - TGFS
+          body: Only use wheel files starting with "tgfs" when deploying to Heroku
+          files: dist/*
+
