@@ -1,0 +1,6 @@
+# Include
+include README.md requirements.txt
+
+# Exclude specific files and folders
+exclude .github/*
+exclude .gitignore

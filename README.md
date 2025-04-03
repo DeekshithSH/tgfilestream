@@ -9,6 +9,9 @@ A reverse proxy is recommended to add TLS. When using a reverse proxy, keep
 `HOST` as-is, but add the publicly accessible URL to `PUBLIC_URL`. The URL
 should include the protocol, e.g. `https://example.com`.
 
+## Deploy to Render/Heroku
+[Click here](https://github.com/DeekshithSH/tgfilestream-docs) to learn how to deploy this bot to Heroku or Render.
+
 ### Environment variables
 * `TG_API_ID` (required) - Your Telegram API ID.
 * `TG_API_HASH` (required) - Your Telegram API hash.
