@@ -19,8 +19,6 @@ import argparse
 
 from yarl import URL
 
-from dotenv import load_dotenv
-
 parser = argparse.ArgumentParser(description="A Telegram bot that can stream Telegram files to users over HTTP.")
 parser.add_argument("--api-id", type=int, help="Your Telegram API ID")
 parser.add_argument("--api-hash", type=str, help="Your Telegram API Hash")
@@ -31,7 +29,11 @@ parser.add_argument("--port", type=int, help="Override the port number")
 parser.add_argument("--debug", action="store_true", help="Enable debug mode")
 args = parser.parse_args()
 
-load_dotenv(args.env)
+try:
+    from dotenv import load_dotenv
+    load_dotenv(args.env)
+except ImportError:
+    print("python-dotenv not installed, can't fetch config from .env file")
 
 try:
     port = args.port or int(os.environ.get("PORT", "8080"))
