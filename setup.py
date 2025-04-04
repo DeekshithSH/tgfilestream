@@ -2,13 +2,18 @@ import setuptools
 
 from tgfilestream import __version__
 
-with open("requirements.txt", encoding="utf-8") as r:
-    requires = [i.strip() for i in r]
 try:
     with open("README.md", encoding="utf-8") as f:
         long_desc =  f.read()
 except IOError:
     long_desc = "Failed to read README.md"
+
+extras = {
+    "env": ["python-dotenv>=0.20"],
+    "fast": ["cryptg>=0.2"],
+}
+
+extras["all"] = sorted({dep for deps in extras.values() for dep in deps})
 
 setuptools.setup(
     name="tgfilestream",
@@ -25,10 +30,12 @@ setuptools.setup(
     packages=setuptools.find_packages(),
     include_package_data=True,
 
-    install_requires=requires,
-    extras_require={
-        "fast": ["cryptg>=0.2"],
-    },
+    install_requires=[
+        "aiohttp>=3",
+        "telethon>=1.10",
+        "yarl>=1",
+    ],
+    extras_require=extras,
     python_requires="~=3.7",
 
     license="AGPL-3.0-or-later",
