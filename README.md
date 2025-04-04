@@ -27,3 +27,4 @@ should include the protocol, e.g. `https://example.com`.
 * `TG_G_C_MESG` - The message that should be shown in a Telegram Group chat.
 * `TG_SESSION_NAME` (defaults to `tgfilestream`) - The name of the Telethon session file to use.
 * `TG_BOT_FATHER_TOKEN` (defaults to None) - This option is mutually exclusive to `TG_SESSION_NAME`, and if set, the client will login as a bot, instead of an user.
+* `CACHE_SIZE` (defaults to 128) - The number of FileInfo objects (messages) to cache.

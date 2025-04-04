@@ -74,6 +74,12 @@ except ValueError:
     print("Please make sure the CONNECTION_LIMIT environment variable is an integer")
     sys.exit(1)
 
+try:
+    # The number of FileInfo objects to cache
+    cache_size = int(os.environ.get("CACHE_SIZE", "128"))
+except ValueError:
+    print("Please make sure the CACHE_SIZE environment variable is an integer")
+    sys.exit(1)
 
 start_message = os.environ.get("TG_START_MESG", "Send an image or file to get a link to download it")
 group_chat_message = os.environ.get("TG_G_C_MESG", "Sorry. But, I only work in private.")
