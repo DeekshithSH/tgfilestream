@@ -13,15 +13,18 @@
 #
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
+
+# Modifications made by Deekshith SH, 2025
+# Copyright (C) 2025 Deekshith SH
 import copy
-from typing import Union, AsyncGenerator, AsyncContextManager, Dict, Optional, List
+from typing import Union, AsyncGenerator, Dict, Optional, List
 from contextlib import asynccontextmanager
 from dataclasses import dataclass
 import logging
 import asyncio
 import math
 
-from telethon import TelegramClient, utils
+from telethon import TelegramClient
 from telethon.crypto import AuthKey
 from telethon.network import MTProtoSender
 from telethon.tl.alltlobjects import LAYER
@@ -119,7 +122,7 @@ class DCConnectionManager:
         return best_conn
 
     @asynccontextmanager
-    async def get_connection(self) -> AsyncContextManager[Connection]:
+    async def get_connection(self) -> AsyncGenerator[Connection, None]:
         async with self._list_lock:
             conn: Connection = await asyncio.shield(self._next_connection())
             # The connection is locked so reconnections don't stack
@@ -185,9 +188,8 @@ class ParallelTransferrer:
         except Exception:
             log.debug("Parallel download errored", exc_info=True)
 
-    def download(self, file: TypeLocation, file_size: int, offset: int, limit: int
+    def download(self, location: TypeLocation, dc_id: int, file_size: int, offset: int, limit: int
                  ) -> AsyncGenerator[bytes, None]:
-        dc_id, location = utils.get_input_location(file)
         part_size = 512 * 1024
         first_part_cut = offset % part_size
         first_part = math.floor(offset / part_size)

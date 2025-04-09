@@ -13,13 +13,14 @@
 #
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
+
+# Modifications made by Deekshith SH, 2024-2025
+# Copyright (C) 2024-2025 Deekshith SH
 import sys
 import os
 
 from yarl import URL
 
-from dotenv import load_dotenv
-load_dotenv()
 
 try:
     port = int(os.environ.get("PORT", "8080"))
@@ -60,8 +61,13 @@ except ValueError:
     print("Please make sure the CONNECTION_LIMIT environment variable is an integer")
     sys.exit(1)
 
+try:
+    # The number of FileInfo objects to cache
+    cache_size = int(os.environ.get("CACHE_SIZE", "128"))
+except ValueError:
+    print("Please make sure the CACHE_SIZE environment variable is an integer")
 
 start_message = os.environ.get("TG_START_MESG", "Send an image or file to get a link to download it")
 group_chat_message = os.environ.get("TG_G_C_MESG", "Sorry. But, I only work in private.")
 
-tg_bot_token = os.environ.get("TG_BOT_FATHER_TOKEN", None)
+tg_bot_token = os.environ.get("TG_BOT_TOKEN", None)

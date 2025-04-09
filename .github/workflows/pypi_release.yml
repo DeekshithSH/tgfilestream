@@ -1,0 +1,60 @@
+name: Build and Release to PyPI
+
+on:
+  push:
+    tags:
+      - "v*"
+  workflow_dispatch: {}
+
+permissions: write-all
+
+jobs:
+  build-and-publish:
+    name: Build and publish to PyPI
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout source
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.x"
+
+      - name: Extract Version from Git tag
+        run: |
+          RAW_TAG=${GITHUB_REF##*/}
+          VERSION=${RAW_TAG#v}
+          echo "VERSION=$VERSION" >> $GITHUB_ENV
+
+      - name: Replace __version__ in setup.py
+        run: |
+          sed -i "s/version=__version__/version='${VERSION}'/" setup.py
+
+      - name: Install dependencies
+        run: python -m pip install --upgrade build twine
+
+      - name: Build package
+        run: python -m build
+
+      - name: Check package
+        run: twine check --strict dist/*
+
+      - name: Publish to PyPI
+        uses: pypa/gh-action-pypi-publish@release/v1
+        with:
+          user: __token__
+          password: ${{ secrets.PYPI_API_TOKEN }}
+        continue-on-error: true
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: v${{ env.VERSION }}
+          name: v${{ env.VERSION }}
+          body: Only use wheel files starting with "tgfs" when deploying to Heroku
+          files: dist/*
+

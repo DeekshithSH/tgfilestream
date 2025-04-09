@@ -13,6 +13,9 @@
 #
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
+
+# Modifications made by Deekshith SH, 2025
+# Copyright (C) 2025 Deekshith SH
 from typing import Tuple, Union
 
 from telethon import events
@@ -36,14 +39,14 @@ msg_id_offset = chat_id_bits + chat_id_offset
 
 def pack_id(evt: events.NewMessage.Event) -> int:
     file_id = 0
-    chat_id=evt.chat_id
-    if evt.is_channel:
-        file_id |= channel_bit
-        chat_id -= - 1000000000000
-    elif evt.is_group:
-        file_id |= group_bit
-        chat_id -= chat_id
-    file_id |= evt.chat_id << chat_id_offset
+    chat_id = evt.chat_id
+    # if evt.is_channel:
+    #     file_id |= channel_bit
+    #     chat_id -= - 1000000000000
+    # elif evt.is_group:
+    #     file_id |= group_bit
+    #     chat_id -= chat_id
+    file_id |= chat_id << chat_id_offset
     file_id |= evt.id << msg_id_offset
     return file_id
 
