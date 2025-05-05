@@ -3,7 +3,7 @@ import setuptools
 from tgfilestream import __version__
 
 try:
-    with open("README.md", encoding="utf-8") as f:
+    with open("README_PIP.md", encoding="utf-8") as f:
         long_desc =  f.read()
 except IOError:
     long_desc = "Failed to read README.md"
@@ -50,6 +50,6 @@ setuptools.setup(
     ],
     entry_points="""
         [console_scripts]
-        tgfilestream=start
+        tgfilestream=tgfilestream.start:main
     """,
 )
