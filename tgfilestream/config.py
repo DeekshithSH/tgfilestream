@@ -21,6 +21,11 @@ import os
 
 from yarl import URL
 
+try:
+    from dotenv import load_dotenv
+    load_dotenv(os.environ.get("ENV_PATH", ".env"))
+except ImportError:
+    print("Warning: python-dotenv not installed. Skipping .env loading.")
 
 try:
     port = int(os.environ.get("PORT", "8080"))
