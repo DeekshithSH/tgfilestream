@@ -1,6 +1,0 @@
-# Include
-include README.md requirements.txt README_PIP.md
-
-# Exclude specific files and folders
-exclude .github/*
-exclude .gitignore

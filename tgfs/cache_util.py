@@ -1,4 +1,4 @@
-# tgfilestream - A Telegram bot that can stream Telegram files to users over HTTP.
+# tgfs - A Telegram bot that can stream Telegram files to users over HTTP.
 # Copyright (C) 2025 Deekshith SH
 #
 # This program is free software: you can redistribute it and/or modify

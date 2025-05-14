@@ -1,4 +1,4 @@
-# tgfilestream - A Telegram bot that can stream Telegram files to users over HTTP.
+# tgfs - A Telegram bot that can stream Telegram files to users over HTTP.
 # Copyright (C) 2019 Tulir Asokan
 #
 # This program is free software: you can redistribute it and/or modify
@@ -36,7 +36,7 @@ ongoing_requests: Dict[str, int] = defaultdict(lambda: 0)
 async def handle_root_request(_) -> web.Response:
     return web.json_response({
         "status": "ok",
-        "source": "https://github.com/DeekshithSH/TGFileStream"
+        "source": "https://github.com/DeekshithSH/tgfs"
     })
 
 @routes.head(r"/{id:[0-9a-fA-F]+}/{name}")
