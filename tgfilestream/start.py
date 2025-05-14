@@ -12,13 +12,8 @@ def main():
     parser.add_argument("--debug", action="store_true", help="Enable debug mode")
     args = parser.parse_args()
 
-    try:
-        from dotenv import load_dotenv
-        load_dotenv(args.env)
-    except ImportError:
-        print("Warning: python-dotenv not installed. Skipping .env loading.")
-
     arg_to_env = {
+        "env": "ENV_PATH",
         "api_id": "TG_API_ID",
         "api_hash": "TG_API_HASH",
         "bot_token": "TG_BOT_TOKEN",

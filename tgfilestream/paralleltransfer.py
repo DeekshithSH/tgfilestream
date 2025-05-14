@@ -193,7 +193,7 @@ class ParallelTransferrer:
         part_size = 512 * 1024
         first_part_cut = offset % part_size
         first_part = math.floor(offset / part_size)
-        last_part_cut = part_size - (limit % part_size)
+        last_part_cut = (limit % part_size) + 1
         last_part = math.ceil(limit / part_size)
         part_count = math.ceil(file_size / part_size)
         self.log.debug(f"Starting parallel download: chunks {first_part}-{last_part}"

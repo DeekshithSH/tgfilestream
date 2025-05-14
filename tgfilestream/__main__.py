@@ -49,7 +49,9 @@ async def start() -> None:
 
 
 async def stop() -> None:
+    log.info("Stopping HTTP Server")
     await runner.cleanup()
+    log.info("Closing Telegram Client")
     await client.disconnect()
 
 
@@ -66,7 +68,9 @@ log.debug(f"Public URL prefix is {public_url}")
 try:
     loop.run_forever()
 except KeyboardInterrupt:
-    loop.run_until_complete(stop())
+    pass
 except Exception:
     log.fatal("Fatal error in event loop", exc_info=True)
     sys.exit(3)
+finally:
+    loop.run_until_complete(stop())

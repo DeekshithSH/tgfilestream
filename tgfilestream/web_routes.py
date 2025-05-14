@@ -80,9 +80,16 @@ async def handle_request(req: web.Request, head: bool = False) -> web.Response:
 
     size = file.size
     try:
-        offset = req.http_range.start or 0
-        limit = req.http_range.stop or size
-        if (limit > size) or (offset < 0) or (limit < offset):
+        range_header = req.headers.get("Range", 0)
+        if range_header:
+            offset, until_bytes = range_header.replace("bytes=", "").split("-")
+            offset = int(offset)
+            limit = int(until_bytes) if until_bytes else size - 1
+        else:
+            offset = req.http_range.start or 0
+            limit = (req.http_range.stop or size) - 1
+
+        if (limit >= size) or (offset < 0) or (limit < offset):
             raise ValueError("range not in acceptable format")
     except ValueError:
         return web.Response(status=416, text="416: Range Not Satisfiable",
@@ -100,7 +107,7 @@ async def handle_request(req: web.Request, head: bool = False) -> web.Response:
                         headers={
                             "Content-Type": file.mime_type,
                             "Content-Range": f"bytes {offset}-{limit}/{size}",
-                            "Content-Length": str(limit - offset),
+                            "Content-Length": str(limit - offset + 1),
                             "Content-Disposition": f'attachment; filename="{file_name}"',
                             "Accept-Ranges": "bytes",
                         })
