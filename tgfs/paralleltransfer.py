@@ -33,7 +33,7 @@ from telethon.tl.functions.auth import ExportAuthorizationRequest, ImportAuthori
 from telethon.tl.functions.upload import GetFileRequest
 from telethon.tl.types import (Document, InputFileLocation, InputDocumentFileLocation,
                                InputPhotoFileLocation, InputPeerPhotoFileLocation, DcOption)
-from telethon.errors import DcIdInvalidError
+from telethon.errors import DcIdInvalidError, FloodWaitError
 
 from .config import connection_limit
 
@@ -185,7 +185,16 @@ class ParallelTransferrer:
             async with dcm.get_connection() as conn:
                 log = conn.log
                 while part <= last_part:
-                    result = await conn.sender.send(request)
+                    while True:
+                        try:
+                            result = await conn.sender.send(request)
+                            break
+                        except FloodWaitError as e:
+                            log.info("Flood wait of %d seconds", e.seconds)
+                            await asyncio.sleep(e.seconds)
+                    if not result.bytes:
+                        break
+
                     request.offset += part_size
                     if part == first_part:
                         yield result.bytes[first_part_cut:]
