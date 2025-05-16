@@ -133,6 +133,13 @@ class DCConnectionManager:
         finally:
             conn.users -= 1
 
+    async def disconnect(self) -> None:
+        async with self._list_lock:
+            for conn in self.connections:
+                conn.log.debug("Disconnecting...")
+                await conn.sender.disconnect()
+                conn.log.debug("Disconnected")
+
 
 class ParallelTransferrer:
     log: logging.Logger = logging.getLogger(__name__)
@@ -155,6 +162,13 @@ class ParallelTransferrer:
 
     def post_init(self) -> None:
         self.dc_managers[self.client.session.dc_id].auth_key = self.client.session.auth_key
+
+    async def close_connection(self) -> None:
+        for dcid, dcm in self.dc_managers.items():
+            if dcm.connections:
+                self.log.debug("Closing connections for DC %d", dcid)
+                await dcm.disconnect()
+        self.log.debug("All DC connections closed")
 
     @property
     def next_index(self) -> int:

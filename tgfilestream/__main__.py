@@ -49,10 +49,12 @@ async def start() -> None:
 
 
 async def stop() -> None:
-    log.info("Stopping HTTP Server")
+    log.debug("Stopping HTTP Server")
     await runner.cleanup()
-    log.info("Closing Telegram Client")
+    log.debug("Closing Telegram Client and Connections")
     await client.disconnect()
+    await transfer.close_connection()
+    log.info("Stopped Bot and Server")
 
 
 try:
