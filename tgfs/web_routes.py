@@ -25,7 +25,7 @@ from aiohttp import web
 
 from .cache_util import FileInfo, lru_cache
 from .util import unpack_id, get_file_name, get_requester_ip
-from .config import request_limit, cache_size
+from .config import request_limit, cache_size, contacts
 from .telegram import client, transfer
 
 log = logging.getLogger(__name__)
@@ -36,7 +36,7 @@ ongoing_requests: Dict[str, int] = defaultdict(lambda: 0)
 async def handle_root_request(_) -> web.Response:
     return web.json_response({
         "status": "ok",
-        "source": "https://github.com/DeekshithSH/tgfs"
+        "contacts": contacts
     })
 
 @routes.head(r"/{id:[0-9a-fA-F]+}/{name}")

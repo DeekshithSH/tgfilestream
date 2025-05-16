@@ -18,6 +18,7 @@
 # Copyright (C) 2024-2025 Deekshith SH
 import sys
 import os
+from typing import Dict
 
 from yarl import URL
 
@@ -76,3 +77,6 @@ start_message = os.environ.get("TG_START_MESG", "Send an image or file to get a 
 group_chat_message = os.environ.get("TG_G_C_MESG", "Sorry. But, I only work in private.")
 
 tg_bot_token = os.environ.get("TG_BOT_TOKEN", None)
+
+contact_key = "CONTACT_"
+contacts: Dict[str, str] = {k[len(contact_key):]: v for k, v in os.environ.items() if k.startswith(contact_key)}
