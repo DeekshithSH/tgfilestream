@@ -102,7 +102,7 @@ async def handle_request(req: web.Request, head: bool = False) -> web.Response:
         body = transfer.download(file.location, file.dc_id, file_size=size, offset=offset, limit=limit)
     else:
         body = None
-    return web.Response(status=206 if (limit-offset != size) else 200,
+    return web.Response(status=200 if (offset == 0 and limit == size - 1) else 206,
                         body=body,
                         headers={
                             "Content-Type": file.mime_type,
