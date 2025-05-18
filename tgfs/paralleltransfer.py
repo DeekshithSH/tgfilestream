@@ -117,6 +117,18 @@ class DCConnectionManager:
         for conn in self.connections:
             if not best_conn or conn.users < best_conn.users:
                 best_conn = conn
+        if best_conn:
+            async with best_conn.lock:
+                sender = best_conn.sender
+                if not sender.is_connected() or sender._reconnecting:
+                    self.log.info("Reconnecting")
+                    if not sender._reconnecting:
+                        sender._start_reconnect(None)
+                    await sender.disconnected
+
+                    while not sender.is_connected():
+                        await asyncio.sleep(0.1)
+                    self.log.info("Reconnected")
         if (not best_conn or best_conn.users > 0) and len(self.connections) < connection_limit:
             best_conn = await self._new_connection()
         return best_conn
